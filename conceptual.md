@@ -45,7 +45,7 @@ Answer the following questions below:
 
 - What are some issues with the following code? (consider all aspects: performance, structure, naming, etc)
 
-  The performance of this code would suffer due to the multiple await calls, we would have to wait for one API call to be completed before it can move on to the next. Instead of returning an array of the requested values from the API, a `Promise.all()` return value would be quicker. You can also parallel request which would call each request at the same time.
+  The performance of this code would suffer due to the multiple await calls, we would have to wait for one API call to be completed before it can move on to the next. Instead of returning an array of the requested values from the API, a `Promise.all()` return value would be quicker. You can also parallel request which would call each request at the same time. You could also rename the first API call to response, deleting the last two, and simply pass a single variable through the function -- something like `name` and pass it into `$.getJSON('https://api.github.com/users/${name}')`.
 ```js
 async function getUsers() {
   const elie = await $.getJSON('https://api.github.com/users/elie');
