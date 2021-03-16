@@ -1,0 +1,26 @@
+{
+  "name": "express-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "urls.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sellersss/node-express-1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sellersss/node-express-1/issues"
+  },
+  "homepage": "https://github.com/sellersss/node-express-1#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "http": "^0.0.1-security",
+    "line-reader": "^0.4.0",
+    "process": "^0.11.10",
+    "request": "^2.88.2"
+  }
+}
