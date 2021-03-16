@@ -1,18 +1,44 @@
 const express = require('express');
-let axios = require('axios');
-var app = express();
+const app = express();
+const axios = require('axios');
+const ExpressError = require('./utils/expressError')
 
-app.post('/', function(req, res, next) {
-  try {
-    let results = req.body.developers.map(async d => {
-      return await axios.get(`https://api.github.com/users/${d}`);
-    });
-    let out = results.map(r => ({ name: r.data.name, bio: r.data.bio }));
+app.use(express.json());
 
-    return res.send(JSON.stringify(out));
-  } catch {
-    next(err);
-  }
+/** POST: Get GitHub username bio and name */
+app.post('/', function(req, res) {
+  if (!req.body.developers) throw new ExpressError('A GitHub username is required.', 400);
+  const devInfo = req.body.developers.map(async (dev) => {
+    try {
+      const res = await axios.get(`https://api.github.com/users/${dev}`);
+      if (res.status !== 404) {
+        return {
+          bio: res.data.bio,
+          name: res.data.name,
+        };
+      }
+    } catch {
+      return { message: "There is no such user!" };
+    }
+  });
+  Promise.all(devInfo).then((data) => {
+    return res.status(200).json(data);
+  })
 });
 
-app.listen(3000);
+/** 404 not found handler */
+app.use((req, res, next) => {
+  const error = new ExpressError('404 Not Found', 404);
+  return next(error);
+})
+
+/** Error handler */
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  return res.json({
+    error: err,
+    message: err.message
+  });
+});
+
+module.exports = app
